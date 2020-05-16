@@ -5,6 +5,7 @@ import pandas as pd
 
 
 base_url = "https://blockstream.info/api"
+#change the range to get to the block height.
 block_height = [i for i in range(101)]
 
 block_rewards = []
@@ -58,31 +59,3 @@ print('Coinbase tx data .csv file saved to folder')
 
 
 
-'''
-
-block_coinbase_url = base_url + '/block/' + block_hash + '/txs/0'
-#print(block_coinbase_url)
-block_coinbase = requests.get(block_coinbase_url).text
-#print(block_coinbase)
-
-
-print('Checking block subsidy for block ' + str(block_height) + '...')
-sleep(5)
-
-try:
-  parsed_block_coinbase = json.loads(block_coinbase)
-  json_block_coinbase = json.dumps(parsed_block_coinbase, indent=4)
-  #print(json_block_coinbase)
-  #print(type(json_block_coinbase))
-
-  block_subsidy = parsed_block_coinbase[0]['vout'][0]['value']
-  #print(type(block_subsidy))
-  print('The block subsidy of this block was: ' + str(block_subsidy) + ' satoshis')
-  print('Block hash is: ' + str(block_hash))
-except json.decoder.JSONDecodeError:
-  print('We have not gotten to the block ' + str(block_height) +  ' yet.')
-  print('------------------------------------------')
-  print('Click the run button to check again.')
-
-
-'''
