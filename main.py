@@ -6,8 +6,9 @@ import pandas as pd
 
 base_url = "https://blockstream.info/api"
 #change the range to get to the block height.
-block_height = [i for i in range(101)]
+block_height = [i for i in range(627000, 630001)]
 
+block_height_list = []
 block_rewards = []
 block_reward_addresses = []
 block_coinbase_txid = []
@@ -16,6 +17,8 @@ coinbase_tx_df = pd.DataFrame(columns = [])
 
 
 for block in block_height:
+  block_height_list.append(block)
+  
   block_hash_url = base_url + '/block-height/' + str(block)
   #print(block_hash_url)
   block_hash = requests.get(block_hash_url).text
@@ -31,20 +34,20 @@ for block in block_height:
   coinbase_tx = requests.get(coinbase_tx_url).text
   parsed_coinbase_tx = json.loads(coinbase_tx)
   json_coinbase_tx = json.dumps(parsed_coinbase_tx, indent = 4)
-  print(json_coinbase_tx)
+  #print(json_coinbase_tx)
 
   try:
     block_reward = parsed_coinbase_tx['vout'][0]['value']
     block_reward_address = parsed_coinbase_tx['vout'][0]['scriptpubkey_address']
     block_rewards.append(block_reward)
     block_reward_addresses.append(block_reward_address)
-    print('Got block reward and block reward address for block ' + str(block))
+    print('Got block reward, block reward address and coinbase txid for block ' + str(block))
   except KeyError:
     block_reward = parsed_coinbase_tx['vout'][0]['value']
     block_reward_address = parsed_coinbase_tx['vout'][0]['scriptpubkey']
     block_rewards.append(block_reward)
     block_reward_addresses.append(block_reward_address)
-    print('Got block reward and block reward address for block ' + str(block))
+    print('Got block reward, block reward address and coinbase txid for block ' + str(block))
     
 #print(block_rewards)
 #print(block_reward_addresses)
